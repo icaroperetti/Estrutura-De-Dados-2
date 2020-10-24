@@ -77,7 +77,15 @@ void printTree(Nodo* root){
     }
 }
 
-void verify(Nodo* temp){
+void printInOrder(Nodo* root){
+    if (root != NULL){
+        printTree(root->left);
+        printf("%d ", root->data);
+        printTree(root->right);
+    }
+}
+
+void found(Nodo* temp){
     if(temp == NULL){
         printf("\nElemento nao encontrado");
     }else{
@@ -97,42 +105,31 @@ Nodo* searchMin(Nodo* root){
 }
 
 Nodo* delete(Nodo* root,int data){
-    if(root != NULL){
-        if(data > root->data){
-            root->right = delete(root->right,data);
-        }else if (data < root->data){
-            root->left = delete(root->left,data);
-        }else{
-            //Se o nó não tiver nenhum filho, da um free
-            if((root->left == NULL) && (root->right == NULL)){
-                free(root);
-                return NULL;
-            }else{
-                //Se tiver filho a direita, guarda em uma variavel auxiliar
-                //e da um free no pai e retorna o aux que ocupa o lugar vazio
-                if(root->left == NULL && root->right != NULL){
-                   Nodo* aux = root->right;
-                   free(root); 
-                   return aux;
-                }else{
-                    //Se tiver filho a esquerda, guarda em uma variavel auxiliar
-                    //e da um free no pai e retorna o aux que ocupa o lugar vazio
-                    if(root->right == NULL && root->left != NULL ){
-                        Nodo* aux = root->left;
-                        free(root);
-                        return aux;
-                    }else{
-                        Nodo* aux = searchMin(root); //Buscando menor valor da arvore
-                        Nodo* keep = aux->data; //Faz uma copia do menor valor da arvore
-                        root = delete(root,keep->data);
-                        root->data = keep;
-                    }
-                }
-            }
-        }
+    if(root == NULL){
         return root;
     }
-    return NULL;
+    if(data < root->data){
+        root->left = delete(root->left, data); 
+    } else if(data > root->data){
+        root->right = delete(root->right,data);
+    }
+    else{
+        if(root->right == NULL){
+            Nodo* temp = root->left;
+            free(root);
+            return temp;
+
+        }else if(root->left == NULL){
+            Nodo* temp = root->right;
+            free(root);
+            return temp;
+        } else{
+            Nodo* aux = searchMin(root->left);
+            root->data = aux->data;
+            root->left = delete(root->left,aux->data);
+        }
+    }
+    return root;
 }
 
 int main(){
@@ -147,18 +144,20 @@ int main(){
     // scanf("%d",&inserir);
     // root = insertNode(root,inserir);
 
-    root = insertNode(root,10);
-    root = insertNode(root,7);
-    root = insertNode(root,12);
+    root = insertNode(root,50);
+    root = insertNode(root,20);
+    root = insertNode(root,30);
     root = insertNode(root,22); 
     root = insertNode(root,3);
     
-    root = delete(root,22);
-
+    root = delete(root,50);
+    
     printTree(root);
+    printf("\n");
+    printInOrder(root);
 
-    Nodo* temp = searchNode(root,10);
-    verify(temp);
+    Nodo* temp = searchNode(root,12);
+    found(temp);
     
     return 0;
 }
