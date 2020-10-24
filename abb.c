@@ -157,7 +157,7 @@ int main(){
 
     printTree(root);
 
-    Nodo* temp = searchNode(root,22);
+    Nodo* temp = searchNode(root,10);
     verify(temp);
     
     return 0;
