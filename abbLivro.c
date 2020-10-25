@@ -3,6 +3,8 @@
 #include<string.h>
 #define TAM 30
 
+/* Aluno: Icaro Peretti */
+
 typedef struct sBook {
     int ssn;
     char name[30];
@@ -26,18 +28,17 @@ Book* createBook(char* name,int ssn){
     return book;
 }
 
-Nodo* createNode(){
+Nodo* memoryAllocation(){
     Nodo* nodo;
     nodo = (Nodo*)malloc(sizeof(Nodo*));
     nodo->left = NULL;
     nodo->right = NULL;
     nodo->book = NULL;
-    return nodo;
 }
 
 Nodo* insertNode(Nodo* root,Book* book){
     if (root == NULL) {
-        Nodo *aux = createNode();
+        Nodo *aux = memoryAllocation();
         aux->book = book;
         return aux;
     }
