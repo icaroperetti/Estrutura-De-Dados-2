@@ -56,7 +56,7 @@ Nodo* insertNode(Nodo* root,Book* book){
 void printTree(Nodo* root){
     if(root != NULL){
         printf("%d ",root->book->ssn);
-        printf("%s ",root->book->name);
+        printf("%s",root->book->name);
         printTree(root->left);
         printTree(root->right);
     }
