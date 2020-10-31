@@ -110,6 +110,7 @@ Nodo* searchMin(Nodo* root){
 
 Nodo* deleteNode(Nodo* root,int issn){
     if(root == NULL){
+        printf("\nElemento nao encontrado para remover");
         return root;
     }
     if( issn < root->book->issn){
@@ -127,6 +128,7 @@ Nodo* deleteNode(Nodo* root,int issn){
             free(root);
             return temp;
         } else{
+             //Remoção se tiver 2 nodos filhos
              Nodo* aux = searchMin(root);
              root->book = aux->book;
              root->left = deleteNode(root->left,aux->book->issn);
@@ -156,19 +158,16 @@ int main(){
      scanf( " %[^\n]",&name);
      Book* book3 = createBook(name,19);
 
-    // printf("Digite o nome da obra: ");
-    // scanf( " %[^\n]",&name);
-    // Book* book4 = createBook(name,9);
+    
 
     root = insertNode(root,book);
     root = insertNode(root,book1);
     root = insertNode(root,book2);
     root = insertNode(root,book3);
-    // root = insertNode(root,book4);
 
     printTree(root);
 
-    root = deleteNode(root,10);
+    root = deleteNode(root,50);
     printf("\n");
     printTree(root);
 
