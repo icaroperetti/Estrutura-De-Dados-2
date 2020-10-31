@@ -3,7 +3,9 @@
 #include<string.h>
 #define TAM 30
 
-/* Aluno: Icaro Peretti */
+/* Aluno: Icaro Peretti 
+   Arvore binaria de busca com livros
+*/
 
 typedef struct sBook {
     int issn;
@@ -76,7 +78,6 @@ Nodo* searchNode(Nodo* root, int issn){
         }else{
             if(issn > root->book->issn){
                 return searchNode(root->right,issn);
-                
             }else{
                 return searchNode(root->left,issn);
             }
@@ -85,50 +86,96 @@ Nodo* searchNode(Nodo* root, int issn){
     return NULL;
 }
 
+
 void found(Nodo* temp){
      if(temp == NULL){
-        printf("\nElemento nao encontrado");
+        printf("\nLivro nao encontrado");
         printf("\n");
     }else{
-        printf("\nElemento encontrado -> ISSN:%d, Nome do livro:%s",temp->book->issn,temp->book->name);
+        printf("\nLivro encontrado -> ISSN:%d Nome do livro:%s",temp->book->issn,temp->book->name);
         printf("\n");
     }
 }
 
+
+Nodo* searchMin(Nodo* root){
+    if(root != NULL){
+        Nodo* aux = root;
+        while(root->left != NULL){
+            // printf("%d\n",aux->left->book->issn);
+            // printf("%s",aux->left->book->name);
+            return aux->left;
+        }
+    }  
+}
+
+Nodo* deleteNode(Nodo* root,int issn){
+    if(root == NULL){
+        return root;
+    }
+    if( issn < root->book->issn){
+        root->left = deleteNode(root->left, issn); 
+    } else if( issn > root->book->issn){
+        root->right = deleteNode(root->right,issn);
+    }
+    else{
+        if(root->right == NULL){
+            Nodo* temp = root->left;
+            free(root);
+            return temp;
+        }else if(root->left == NULL){
+            Nodo* temp = root->right;
+            free(root);
+            return temp;
+        } else{
+             Nodo* aux = searchMin(root);
+             root->book = aux->book;
+             root->left = deleteNode(root->left,aux->book->issn);
+        }
+    }
+    return root;
+}
+
+
 int main(){
     Nodo* root = inicialize();
-    char livro[TAM];
+    char name[TAM];
 
     printf("Digite o nome da obra: ");
-    scanf(" %[^\n]",livro);
-    Book* book = createBook(livro,10);
+    scanf(" %[^\n]",&name);
+    Book* book = createBook(name,10);
 
     printf("Digite o nome da obra: ");
-    scanf( " %[^\n]",livro);
-    Book* book1 = createBook(livro,20);
+    scanf( " %[^\n]",&name);
+    Book* book1 = createBook(name,20);
 
     printf("Digite o nome da obra: ");
-    scanf( " %[^\n]",livro);
-    Book* book2 = createBook(livro,9);
+    scanf( " %[^\n]",&name);
+    Book* book2 = createBook(name,8);
 
-    printf("Digite o nome da obra: ");
-    scanf( " %[^\n]",livro);
-    Book* book3 = createBook(livro,22);
+     printf("Digite o nome da obra: ");
+     scanf( " %[^\n]",&name);
+     Book* book3 = createBook(name,19);
 
-    printf("Digite o nome da obra: ");
-    scanf( " %[^\n]",livro);
-    Book* book4 = createBook(livro,8);
+    // printf("Digite o nome da obra: ");
+    // scanf( " %[^\n]",&name);
+    // Book* book4 = createBook(name,9);
 
     root = insertNode(root,book);
     root = insertNode(root,book1);
     root = insertNode(root,book2);
     root = insertNode(root,book3);
-    root = insertNode(root,book4);
+    // root = insertNode(root,book4);
 
-    Nodo* temp = searchNode(root,28);
-    found(temp);
-    
     printTree(root);
 
+    root = deleteNode(root,10);
+    printf("\n");
+    printTree(root);
+
+    Nodo* temp = searchNode(root,20);
+    found(temp);
+    
+    
     return 0;
 }
