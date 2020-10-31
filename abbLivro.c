@@ -102,9 +102,8 @@ Nodo* searchMin(Nodo* root){
     if(root != NULL){
         Nodo* aux = root;
         while(root->left != NULL){
-            // printf("%d\n",aux->left->book->issn);
-            // printf("%s",aux->left->book->name);
-            return aux->left;
+            aux = aux->left;
+            return aux;
         }
     }  
 }
