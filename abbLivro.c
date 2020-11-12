@@ -3,8 +3,9 @@
 #include <string.h>
 #define TAM 30
 
-/* Aluno: Icaro Peretti 
-   Arvore binaria de busca com livros
+/* 
+    Aluno: Icaro Peretti 
+    Arvore binaria de busca com livros
 */
 
 typedef struct sBook
@@ -20,10 +21,6 @@ typedef struct sNodo
     Book *book;
 } Nodo;
 
-Nodo *inicialize()
-{
-    return NULL;
-}
 
 Book *createBook(char *name, int issn)
 {
@@ -90,8 +87,8 @@ void preOrder(Nodo *root)
 
 void inOrder(Nodo *root)
 {
-
     if (root != NULL)
+
     {
         inOrder(root->left);
         printf("ISSN:%d ", root->book->issn);
@@ -121,7 +118,7 @@ Nodo *searchNode(Nodo *root, int issn)
         }
         else
         {
-            if (issn > root->book->issn)
+            if (root->book->issn > issn )
             {
                 return searchNode(root->right, issn);
             }
@@ -204,43 +201,87 @@ Nodo *deleteNode(Nodo *root, int issn)
 
 int main()
 {
-    Nodo *root = inicialize();
     char name[TAM];
+    int op = 0,issn = 0;
+    Nodo *root = NULL;
 
-    printf("Digite o nome da obra: ");
-    scanf(" %[^\n]", &name);
-    Book *book = createBook(name, 10);
+    for (;;)
+    {
+        printf("\nSelecione uma opcao:\n0 - Sair\n1 - Inserir\n2 - Imprimir em ordem\n3 - Imprimir em pre-ordem\n4 - Imprimir em pos-ordem\n5 - Buscar\n6 - Remover\n");
+        scanf("%d", &op);
 
-    printf("Digite o nome da obra: ");
-    scanf(" %[^\n]", &name);
-    Book *book1 = createBook(name, 20);
+        if (op == 1)
+        {
+            printf("Digite o nome da obra: ");
+            scanf(" %[^\n]", &name);
 
-    printf("Digite o nome da obra: ");
-    scanf(" %[^\n]", &name);
-    Book *book2 = createBook(name, 8);
+            printf("Digite o ISSN:");
+            scanf("%d",&issn);
+            Book *book = createBook(name, issn);
+            root = insertNode(root, book);
+        }
+        if (op == 2)
+        {
+            inOrder(root);
+        }
+        if (op == 3)
+        {
+            preOrder(root);
+        }
+        if (op == 4)
+        {
+            postOrder(root);
+        }
+        if (op == 5)
+        {
+            printf("Digite o issn:");
+            scanf("%d",&issn);
+            Nodo *temp = searchNode(root, issn);
+            found(temp);
+        }
+        if (op == 6)
+        {
+            printf("Digite o issn:");
+            scanf("%d", &issn);
+            root = deleteNode(root, issn);
+        }
+        if (op <= 0 || op > 6)
+        {
+            printf("Finalizando o programa...");
+            exit(0);
+        }
+    }
 
-    printf("Digite o nome da obra: ");
-    scanf(" %[^\n]", &name);
-    Book *book3 = createBook(name, 19);
+    // printf("Digite o nome da obra: ");
+    // scanf(" %[^\n]", &name);
+    // Book *book1 = createBook(name, 20);
 
-    root = insertNode(root, book);
-    root = insertNode(root, book1);
-    root = insertNode(root, book2);
-    root = insertNode(root, book3);
+    // printf("Digite o nome da obra: ");
+    // scanf(" %[^\n]", &name);
+    // Book *book2 = createBook(name, 8);
 
-    //root = deleteNode(root,10);
+    // printf("Digite o nome da obra: ");
+    // scanf(" %[^\n]", &name);
+    // Book *book3 = createBook(name, 19);
 
-    printf("Pre Ordem\n");
-    preOrder(root);
+    // root = insertNode(root, book);
+    // root = insertNode(root, book1);
+    // root = insertNode(root, book2);
+    // root = insertNode(root, book3);
 
-    printf("\n\nEm ordem\n");
-    inOrder(root);
+    // root = deleteNode(root,10);
 
-    printf("\n\nPost ordem\n");
-    postOrder(root);
+    // printf("\nPre Ordem\n");
+    // preOrder(root);
 
-    Nodo *temp = searchNode(root, 20);
-    found(temp);
+    // printf("\n\nEm ordem\n");
+    // inOrder(root);
+
+    // printf("\n\nPos ordem\n");
+    // postOrder(root);
+
+    // Nodo *temp = searchNode(root, 20);
+    // found(temp);
 
     return 0;
 }
