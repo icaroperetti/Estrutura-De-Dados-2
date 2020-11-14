@@ -182,23 +182,15 @@ Nodo *deleteNode(Nodo *root, int issn)
 
 void freeTree(Nodo* root){
     if(root != NULL){
-        freeTree(root->left);
         freeTree(root->right);
-        free(root);
+        freeTree(root->left);
+        printf("Excluindo livro com ISSN: %d\n",root->book->issn);
+        free(root->book);
     }
+    
 }
 
-int isEmpty(Nodo* root)
-{
-	if(root == NULL)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+
 
 int main()
 {
@@ -238,7 +230,6 @@ int main()
             printf("Digite o issn:");
             scanf("%d", &issn);
             searchNode(root, issn);
-            //found(temp);
         }
         if (op == 6)
         {
@@ -248,8 +239,8 @@ int main()
         }
         if(op == 7)
         {
-        	printf("Liberando memoria...");
         	freeTree(root);
+        	printf("Avore destruida!");
 		}
         if (op <= 0 || op > 7)
         {
@@ -286,7 +277,8 @@ int main()
     // printf("\n\nPos ordem\n");
     // postOrder(root);
 
- 
+    // Nodo *temp = searchNode(root, 20);
+    // found(temp);
 
     return 0;
 }
