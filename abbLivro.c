@@ -88,13 +88,13 @@ void preOrder(Nodo *root)
 void inOrder(Nodo *root)
 {
     if (root != NULL)
-
     {
         inOrder(root->left);
         printf("ISSN:%d ", root->book->issn);
         printf("Livro:%s, ", root->book->name);
         inOrder(root->right);
     }
+   
 }
 
 void postOrder(Nodo *root)
@@ -110,40 +110,21 @@ void postOrder(Nodo *root)
 
 Nodo *searchNode(Nodo *root, int issn)
 {
-    if (root != NULL)
-    {
-        if (root->book->issn == issn)
-        {
-            return root;
-        }
-        else
-        {
-            if (root->book->issn > issn )
-            {
-                return searchNode(root->right, issn);
-            }
-            else
-            {
-                return searchNode(root->left, issn);
-            }
-        }
+    if((root == NULL) || (root->book->issn == issn)){
+        printf("\nLivro encontrado -> ISSN:%d Nome do livro:%s", root->book->issn, root->book->name);
+        return root;
     }
-    return NULL;
-}
-
-void found(Nodo *temp)
-{
-    if (temp == NULL)
-    {
-        printf("\nLivro nao encontrado");
-        printf("\n");
+    
+    if(root->book->issn < issn){
+        searchNode(root->right, issn);
     }
     else
     {
-        printf("\nLivro encontrado -> ISSN:%d Nome do livro:%s", temp->book->issn, temp->book->name);
-        printf("\n");
+        return searchNode(root->left,issn);
     }
+    
 }
+
 
 Nodo *searchMin(Nodo *root)
 {
@@ -199,6 +180,18 @@ Nodo *deleteNode(Nodo *root, int issn)
     return root;
 }
 
+void freeTree(Nodo* root){
+    if(root != NULL){
+        freeTree(root->right);
+        freeTree(root->left);
+        printf("Excluindo livro com ISSN: %d\n",root->book->issn);
+        free(root->book);
+    }
+    
+}
+
+
+
 int main()
 {
     char name[TAM];
@@ -207,7 +200,7 @@ int main()
 
     for (;;)
     {
-        printf("\nSelecione uma opcao:\n0 - Sair\n1 - Inserir\n2 - Imprimir em ordem\n3 - Imprimir em pre-ordem\n4 - Imprimir em pos-ordem\n5 - Buscar\n6 - Remover\n");
+        printf("\nSelecione uma opcao:\n0 - Sair\n1 - Inserir\n2 - Imprimir em ordem\n3 - Imprimir em pre-ordem\n4 - Imprimir em pos-ordem\n5 - Buscar\n6 - Remover\n7 - Liberar memoria\n");
         scanf("%d", &op);
 
         if (op == 1)
@@ -221,8 +214,8 @@ int main()
             root = insertNode(root, book);
         }
         if (op == 2)
-        {
-            inOrder(root);
+        {	
+			inOrder(root);
         }
         if (op == 3)
         {
@@ -235,9 +228,8 @@ int main()
         if (op == 5)
         {
             printf("Digite o issn:");
-            scanf("%d",&issn);
-            Nodo *temp = searchNode(root, issn);
-            found(temp);
+            scanf("%d", &issn);
+            searchNode(root, issn);
         }
         if (op == 6)
         {
@@ -245,7 +237,12 @@ int main()
             scanf("%d", &issn);
             root = deleteNode(root, issn);
         }
-        if (op <= 0 || op > 6)
+        if(op == 7)
+        {
+        	freeTree(root);
+        	printf("Avore destruida!");
+		}
+        if (op <= 0 || op > 7)
         {
             printf("Finalizando o programa...");
             exit(0);
