@@ -286,8 +286,7 @@ int main()
     // printf("\n\nPos ordem\n");
     // postOrder(root);
 
-    // Nodo *temp = searchNode(root, 20);
-    // found(temp);
+ 
 
     return 0;
 }
