@@ -35,7 +35,7 @@ Book *createBook(char *name, int issn)
     return book;
 }
 
-Nodo *memoryAllocation()
+Nodo *createNodo()
 {
     Nodo *nodo;
     nodo = (Nodo *)malloc(sizeof(Nodo));
@@ -55,7 +55,7 @@ Nodo *insertNode(Nodo *root, Book *book)
 {
     if (root == NULL)
     {
-        Nodo *aux = memoryAllocation();
+        Nodo *aux = createNodo();
         aux->book = book;
         return aux;
     }
@@ -110,11 +110,13 @@ void postOrder(Nodo *root)
 
 Nodo *searchNode(Nodo *root, int issn)
 {
-    if((root == NULL) || (root->book->issn == issn)){
-        printf("\nLivro encontrado -> ISSN:%d Nome do livro:%s", root->book->issn, root->book->name);
+    if(root == NULL){
+    	printf("Elemento nao encontrado");
         return root;
     }
-    
+    else if(root->book->issn == issn){
+    	 printf("\nLivro encontrado -> ISSN:%d Nome do livro:%s", root->book->issn, root->book->name);
+	}
     if(root->book->issn < issn){
         searchNode(root->right, issn);
     }
