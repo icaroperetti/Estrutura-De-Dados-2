@@ -38,13 +38,12 @@ Book *createBook(char *name, int issn)
 Nodo *createNodo()
 {
     Nodo *nodo;
-    nodo = (Nodo *)malloc(sizeof(Nodo));
+    nodo = (Nodo*)malloc(sizeof(Nodo));
 
     if (nodo == NULL)
     {
         printf("Memoria nao alocada nodo");
     }
-
     nodo->left = NULL;
     nodo->right = NULL;
     nodo->book = NULL;
@@ -75,7 +74,6 @@ Nodo *insertNode(Nodo *root, Book *book)
 
 void preOrder(Nodo *root)
 {
-
     if (root != NULL)
     {
         printf("ISSN:%d ", root->book->issn);
@@ -93,8 +91,7 @@ void inOrder(Nodo *root)
         printf("ISSN:%d ", root->book->issn);
         printf("Livro:%s, ", root->book->name);
         inOrder(root->right);
-    }
-   
+    }  
 }
 
 void postOrder(Nodo *root)
@@ -116,6 +113,7 @@ Nodo *searchNode(Nodo *root, int issn)
     }
     else if(root->book->issn == issn){
     	 printf("\nLivro encontrado -> ISSN:%d Nome do livro:%s", root->book->issn, root->book->name);
+    	 return root;
 	}
     if(root->book->issn < issn){
         searchNode(root->right, issn);
@@ -182,16 +180,18 @@ Nodo *deleteNode(Nodo *root, int issn)
     return root;
 }
 
-void freeTree(Nodo* root){
+Nodo* freeTree(Nodo* root){
+	if(root == NULL){
+		return;
+	}
     if(root != NULL){
-        freeTree(root->right);
         freeTree(root->left);
+        freeTree(root->right);
+        
         printf("Excluindo livro com ISSN: %d\n",root->book->issn);
-        free(root->book);
+        free(root);
     }
-    
 }
-
 
 
 int main()
@@ -242,7 +242,7 @@ int main()
         if(op == 7)
         {
         	freeTree(root);
-        	printf("Avore destruida!");
+        	printf("Arvore destruida!");
 		}
         if (op <= 0 || op > 7)
         {
@@ -250,37 +250,5 @@ int main()
             exit(0);
         }
     }
-
-    // printf("Digite o nome da obra: ");
-    // scanf(" %[^\n]", &name);
-    // Book *book1 = createBook(name, 20);
-
-    // printf("Digite o nome da obra: ");
-    // scanf(" %[^\n]", &name);
-    // Book *book2 = createBook(name, 8);
-
-    // printf("Digite o nome da obra: ");
-    // scanf(" %[^\n]", &name);
-    // Book *book3 = createBook(name, 19);
-
-    // root = insertNode(root, book);
-    // root = insertNode(root, book1);
-    // root = insertNode(root, book2);
-    // root = insertNode(root, book3);
-
-    // root = deleteNode(root,10);
-
-    // printf("\nPre Ordem\n");
-    // preOrder(root);
-
-    // printf("\n\nEm ordem\n");
-    // inOrder(root);
-
-    // printf("\n\nPos ordem\n");
-    // postOrder(root);
-
-    // Nodo *temp = searchNode(root, 20);
-    // found(temp);
-
     return 0;
 }
