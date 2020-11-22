@@ -12,14 +12,19 @@ typedef struct sBook
 {
     int issn;
     char name[30];
-} Book;
+}Book;
 
 typedef struct sNode
 {
     struct sNode *left;
     struct sNode *right;
     Book *book;
-} Node;
+}Node;
+
+Node *inicialize()
+{
+    return NULL;
+}
 
 Book *createBook(char *name, int issn)
 {
@@ -30,15 +35,14 @@ Book *createBook(char *name, int issn)
         printf("Memoria nao alocada livro");
     }
     book->issn = issn;
-    strcpy(book->name, name);
+    strcpy(book->name, name); //Joga o nome recebido por parametro para a variavel
     return book;
 }
 
-Node *createNodo()
+Node *createNode()
 {
     Node *node;
     node = (Node*)malloc(sizeof(Node));
-
     if (node == NULL)
     {
         printf("Memoria nao alocada node");
@@ -53,7 +57,7 @@ Node *insertNode(Node *root, Book *book)
 {
     if (root == NULL)
     {
-        Node *aux = createNodo();
+        Node *aux = createNode();
         aux->book = book;
         return aux;
     }
@@ -62,8 +66,7 @@ Node *insertNode(Node *root, Book *book)
         if (book->issn > root->book->issn)
         {
             root->right = insertNode(root->right, book);
-        }
-        else if (book->issn < root->book->issn)
+        }else if (book->issn < root->book->issn)
         {
             root->left = insertNode(root->left, book);
         }
@@ -71,40 +74,41 @@ Node *insertNode(Node *root, Book *book)
     return root;
 }
 
+//----- Percursos -----
+
+//impressão root -> esquerda -> direita
 void preOrder(Node *root)
 {
     if (root != NULL)
     {
         printf("ISSN:%d ", root->book->issn);
-        printf("Livro:%s, ", root->book->name);
+        printf("Livro:%s\n", root->book->name);
         preOrder(root->left);
         preOrder(root->right);
     }
 }
 
+//Impressão esquerda -> root-> direita
 void inOrder(Node *root)
-{
+{   
     if (root != NULL)
-    {
+    {   
         inOrder(root->left);
         printf("ISSN:%d ", root->book->issn);
-        printf("Livro:%s, ", root->book->name);
+        printf("Livro:%s\n", root->book->name);
         inOrder(root->right);
     }
 }
 
+//Impressão esquerda -> direita -> root
 void postOrder(Node *root)
 {
-    if (root == NULL)
-    {
-        return;
-    }
     if (root != NULL)
     {
         postOrder(root->left);
         postOrder(root->right);
         printf("ISSN:%d ", root->book->issn);
-        printf("Livro:%s, ", root->book->name);
+        printf("Livro:%s\n", root->book->name);
     }
 }
 
@@ -124,7 +128,7 @@ Node *searchNode(Node *root, int issn)
     {
         return searchNode(root->left, issn);
     }
-     else if (root->book->issn == issn)
+    else if (root->book->issn == issn)
     {
         printf("\nLivro encontrado -> ISSN:%d Nome do livro:%s", root->book->issn, root->book->name);
         return root;
@@ -161,17 +165,20 @@ Node *deleteNode(Node *root, int issn)
         root->right = deleteNode(root->right,issn);
     }else
     {
-
-        if(root->left == NULL)
+        if (root->left == NULL && root->right == NULL)
+        {
+            free(root);
+            return NULL;
+        }
+        else
+         if(root->left == NULL)
         {
             Node* temp = root->right;
             free(root);
             return temp;
-
         }
         else if(root->right == NULL)
         {
-            
             Node* temp = root->left;
             free(root);
             return temp;
@@ -179,7 +186,7 @@ Node *deleteNode(Node *root, int issn)
 
         //Encontrar o menor elemento da subarvore da direita
         Node* substitute = searchMin(root->right);
-        Book* aux = substitute; //Faz uma copia do elemento encontrado
+        Book* aux = substitute->book; //Faz uma copia do elemento encontrado
 
         root->right = deleteNode(root->right,substitute->book->issn); //Deleta o menor valor
         root->book = substitute->book; //Joga o menor valor guardado como root
@@ -189,21 +196,22 @@ Node *deleteNode(Node *root, int issn)
 }
 
 
-void destroy(Node* root)
+Node* destroy(Node* root)
 {   
-    if (root != NULL)
-    {
+    if(root != NULL)
+    {   
         destroy(root->left);
         destroy(root->right);
-        free(root->book);
+        free(root);
     }
+    return NULL;
 }
 
 void menu()
 {
     char name[TAM];
     int op = 0, issn = 0;
-    Node *root = NULL;
+    Node *root = inicialize();
 
     for (;;)
     {
@@ -213,10 +221,10 @@ void menu()
         if (op == 1)
         {
             printf("Digite o nome da obra: ");
-            scanf(" %[^\n]", &name);
+            scanf(" %[^\n]",&name);
 
             printf("Digite o ISSN:");
-            scanf("%d", &issn);
+            scanf("%d",&issn);
             Book *book = createBook(name, issn);
             root = insertNode(root, book);
            
@@ -247,11 +255,11 @@ void menu()
         }
         if (op == 7)
         {
-            destroy(root);
-            printf("Insira novos elementos");
+            root = destroy(root);
         }
         if (op <= 0 || op > 7)
         {
+            destroy(root);
             printf("Programa finalizdo!...");
             exit(0);
         }
