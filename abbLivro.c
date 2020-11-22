@@ -170,8 +170,7 @@ Node *deleteNode(Node *root, int issn)
             free(root);
             return NULL;
         }
-        else
-         if(root->left == NULL)
+        else if(root->left == NULL)
         {
             Node* temp = root->right;
             free(root);
