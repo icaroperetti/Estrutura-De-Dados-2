@@ -14,12 +14,12 @@ typedef struct sBook
     char name[30];
 } Book;
 
-typedef struct sNodo
+typedef struct sNode
 {
-    struct sNodo *left;
-    struct sNodo *right;
+    struct sNode *left;
+    struct sNode *right;
     Book *book;
-} Nodo;
+} Node;
 
 Book *createBook(char *name, int issn)
 {
@@ -34,26 +34,26 @@ Book *createBook(char *name, int issn)
     return book;
 }
 
-Nodo *createNodo()
+Node *createNodo()
 {
-    Nodo *nodo;
-    nodo = (Nodo *)malloc(sizeof(Nodo));
+    Node *node;
+    node = (Node*)malloc(sizeof(Node));
 
-    if (nodo == NULL)
+    if (node == NULL)
     {
-        printf("Memoria nao alocada nodo");
+        printf("Memoria nao alocada node");
     }
-    nodo->left = NULL;
-    nodo->right = NULL;
-    nodo->book = NULL;
-    return nodo;
+    node->left = NULL;
+    node->right = NULL;
+    node->book = NULL;
+    return node;
 }
 
-Nodo *insertNode(Nodo *root, Book *book)
+Node *insertNode(Node *root, Book *book)
 {
     if (root == NULL)
     {
-        Nodo *aux = createNodo();
+        Node *aux = createNodo();
         aux->book = book;
         return aux;
     }
@@ -71,7 +71,7 @@ Nodo *insertNode(Nodo *root, Book *book)
     return root;
 }
 
-void preOrder(Nodo *root)
+void preOrder(Node *root)
 {
     if (root != NULL)
     {
@@ -82,7 +82,7 @@ void preOrder(Nodo *root)
     }
 }
 
-void inOrder(Nodo *root)
+void inOrder(Node *root)
 {
     if (root != NULL)
     {
@@ -93,7 +93,7 @@ void inOrder(Nodo *root)
     }
 }
 
-void postOrder(Nodo *root)
+void postOrder(Node *root)
 {
     if (root == NULL)
     {
@@ -108,7 +108,7 @@ void postOrder(Nodo *root)
     }
 }
 
-Nodo *searchNode(Nodo *root, int issn)
+Node *searchNode(Node *root, int issn)
 {
     if (root == NULL)
     {
@@ -131,9 +131,9 @@ Nodo *searchNode(Nodo *root, int issn)
     }
 }
 
-Nodo *searchMin(Nodo *root)
+Node *searchMin(Node *root)
 {
-    Nodo *aux = root;
+    Node *aux = root;
     if (root != NULL)
     {
         while (root->left != NULL)
@@ -146,7 +146,7 @@ Nodo *searchMin(Nodo *root)
 }
 
 
-Nodo *deleteNode(Nodo *root, int issn)
+Node *deleteNode(Node *root, int issn)
 {
     if(root == NULL)
     {
@@ -164,7 +164,7 @@ Nodo *deleteNode(Nodo *root, int issn)
 
         if(root->left == NULL)
         {
-            Nodo* temp = root->right;
+            Node* temp = root->right;
             free(root);
             return temp;
 
@@ -172,13 +172,13 @@ Nodo *deleteNode(Nodo *root, int issn)
         else if(root->right == NULL)
         {
             
-            Nodo* temp = root->left;
+            Node* temp = root->left;
             free(root);
             return temp;
         }
 
         //Encontrar o menor elemento da subarvore da direita
-        Nodo* substitute = searchMin(root->right);
+        Node* substitute = searchMin(root->right);
         Book* aux = substitute; //Faz uma copia do elemento encontrado
 
         root->right = deleteNode(root->right,substitute->book->issn); //Deleta o menor valor
@@ -189,7 +189,7 @@ Nodo *deleteNode(Nodo *root, int issn)
 }
 
 
-void destroy(Nodo* root)
+void destroy(Node* root)
 {   
     if (root != NULL)
     {
@@ -203,7 +203,7 @@ void menu()
 {
     char name[TAM];
     int op = 0, issn = 0;
-    Nodo *root = NULL;
+    Node *root = NULL;
 
     for (;;)
     {
