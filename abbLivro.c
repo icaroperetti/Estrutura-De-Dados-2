@@ -33,6 +33,7 @@ Book *createBook(char *name, int issn)
     if (book == NULL)
     {
         printf("Memoria nao alocada livro");
+        return 0;
     }
     book->issn = issn;
     strcpy(book->name, name); //Joga o nome recebido por parametro para a variavel
@@ -46,6 +47,7 @@ Node *createNode()
     if (node == NULL)
     {
         printf("Memoria nao alocada node");
+        return 0;
     }
     node->left = NULL;
     node->right = NULL;
@@ -119,7 +121,6 @@ Node *searchNode(Node *root, int issn)
         printf("Elemento nao encontrado");
         return root;
     }
-   
     else if (issn > root->book->issn)
     {
         searchNode(root->right, issn);
@@ -137,18 +138,20 @@ Node *searchNode(Node *root, int issn)
 
 Node *searchMin(Node *root)
 {
-    Node *aux = root;
-    if (root != NULL)
+    if(root != NULL)
     {
-        while (root->left != NULL)
+        Node *aux = root->left;
+        while (aux->left != NULL)
         {
-            aux = aux->left; 
+            aux = aux->left;
         }
         return aux;
     }
-    return NULL;
+    else 
+    {
+        return NULL;
+    }
 }
-
 
 Node *deleteNode(Node *root, int issn)
 {
@@ -170,26 +173,26 @@ Node *deleteNode(Node *root, int issn)
             free(root);
             return NULL;
         }
-        else if(root->left == NULL)
+        else if((root->left == NULL) && (root->right != NULL))
         {
             Node* temp = root->right;
             free(root);
             return temp;
         }
-        else if(root->right == NULL)
+        else if((root->right == NULL) && (root->left != NULL))
         {
             Node* temp = root->left;
             free(root);
             return temp;
         }
+        else{
+            //Encontrar o menor elemento da subarvore da direita
+            Node *substitute = searchMin(root->right);
+            Book *aux = substitute->book; //Faz uma copia do elemento encontrado
 
-        //Encontrar o menor elemento da subarvore da direita
-        Node* substitute = searchMin(root->right);
-        Book* aux = substitute->book; //Faz uma copia do elemento encontrado
-
-        root->right = deleteNode(root->right,substitute->book->issn); //Deleta o menor valor
-        root->book = substitute->book; //Joga o menor valor guardado como root
-        
+            root->right = deleteNode(root->right, substitute->book->issn); //Deleta o menor valor
+            root->book = substitute->book;  //Joga o menor valor guardado no lugar do root
+        }
     } 
     return root;  
 }
@@ -256,11 +259,15 @@ void menu()
         {
             root = destroy(root);
         }
-        if (op <= 0 || op > 7)
-        {
-            destroy(root);
-            printf("Programa finalizdo!...");
+        if(op == 0)
+        {   
+            root = destroy(root);
+            printf("Finalizando o programa...");
             exit(0);
+        }
+        if(op <= 0 || op > 7)
+        {
+            printf("Comando invalido\n");
         }
     }
 }
