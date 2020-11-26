@@ -138,20 +138,18 @@ Node *searchNode(Node *root, int issn)
 
 Node *searchMin(Node *root)
 {
-    if(root != NULL)
+    Node *aux = root;
+    if (root != NULL)
     {
-        Node *aux = root->left;
-        while (aux->left != NULL)
+        while (root->left != NULL)
         {
-            aux = aux->left;
+            aux = aux->left; 
         }
         return aux;
     }
-    else 
-    {
-        return NULL;
-    }
+    return NULL;
 }
+
 
 Node *deleteNode(Node *root, int issn)
 {
