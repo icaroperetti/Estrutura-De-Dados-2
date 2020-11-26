@@ -165,26 +165,32 @@ Node *deleteNode(Node *root, int issn)
         root->right = deleteNode(root->right,issn);
     }else
     {  
-     if(root->left == NULL)
-        {
-            Node* temp = root->right;
-            free(root);
-            return temp;
-        }
-        else if(root->right == NULL)
-        {
-            Node* temp = root->left;
-            free(root);
-            return temp;
-        }
-        else{
-            //Encontrar o menor elemento da subarvore da direita
-            Node *substitute = searchMin(root->right);
-            Book *aux = substitute->book; //Faz uma copia do elemento encontrado
-            root->right = deleteNode(root->right, substitute->book->issn); //Deleta o menor valor
-            root->book = substitute->book;  //Joga o menor valor guardado no lugar do root
-        }
-    } 
+    if(root->left == NULL && root->right == NULL)
+    {
+        free(root);
+        return NULL;
+    }
+    else if(root->left == NULL && root->right != NULL)
+    {
+        Node *temp = root->right;
+        free(root);
+        return temp;
+    }
+    else if (root->right == NULL && root->left != NULL)
+    {
+        Node *temp = root->left;
+        free(root);
+        return temp;
+    }
+    else
+    {
+        //Encontrar o menor elemento da subarvore da direita
+        Node *substitute = searchMin(root->right);
+        Book *aux = substitute->book;                                  //Faz uma copia do elemento encontrado
+        root->right = deleteNode(root->right, substitute->book->issn); //Deleta o menor valor
+        root->book = substitute->book;                                 //Joga o menor valor guardado no lugar do root
+    }
+    }
     return root;  
 }
 
