@@ -266,13 +266,13 @@ Node *deleteNode(Node *root, int issn)
             //Dependendo da altura encontrada faz uma rotação a esquerda ou direita esquerda
             if (getHeight(root->right->left) <= getHeight(root->right->right))
             {
-                //printf("Alturas: %d -> %d\n",root->right->left,root->right->right);
-                return rotateRR(root); //Rotação esquerda (caso inserção direita direita)
+                
+                return rotateRR(root); //Rotação esquerda (caso direita direita)
             }
             else
             {
                 //Rotação right -> left
-                //Caso cotovelo (inserção direita esquerda)
+                //Caso cotovelo (direita esquerda)
                 root->right = rotateLL(root->right); 
                 return rotateRR(root);
             }
