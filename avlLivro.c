@@ -234,19 +234,16 @@ Node *searchNode(Node *root, int issn)
 
 Node *searchMin(Node *root)
 {
+    Node *aux = root;
     if (root != NULL)
     {
-        Node *aux = root->left;
-        while(aux->left != NULL)
+        while (root->left != NULL)
         {
             aux = aux->left; 
         }
         return aux;
     }
-    else 
-    {
-      return NULL;
-    }
+    return NULL;
 }
 
 Node *deleteNode(Node *root, int issn)
@@ -301,18 +298,13 @@ Node *deleteNode(Node *root, int issn)
     }
     else
     {
-        if(root->right == NULL && root->left == NULL)
-        {
-            free(root);
-            return NULL;
-        }
-        else if (root->right == NULL && root->left != NULL)
+     if (root->right == NULL)
         {
             Node *temp = root->left;
             free(root);
             return temp;
         }
-        else if (root->left == NULL && root->right != NULL)
+        else if (root->left == NULL)
         {
            
             Node *temp = root->right;
@@ -329,7 +321,7 @@ Node *deleteNode(Node *root, int issn)
             {
                 if(getHeight(root->left->right) <= getHeight(root->left->left))
                 {
-                    printf("Cheguei aqui \n");
+                   
                     return rotateLL(root); //Rotação direita
                 }
                 else
