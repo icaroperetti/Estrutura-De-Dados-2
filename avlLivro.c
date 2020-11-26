@@ -137,7 +137,7 @@ Node *insertNode(Node *root, Book *book)
             //Se o valor inserido for menor que o filho da esquerda da raiz faz rotação
             if (book->issn < root->left->book->issn)
             {
-                 rotateLL(root); //Rotação para a direita (left left)
+                 return rotateLL(root); //Rotação para a direita (left left)
             }
             else
             {
@@ -156,7 +156,7 @@ Node *insertNode(Node *root, Book *book)
                 //Se o valor inserido for maior que o filho da direita da raiz faz rotação
                 if (book->issn > root->right->book->issn)
                 {
-                    rotateRR(root); //Rotação para a  esquerda
+                    return rotateRR(root); //Rotação para a  esquerda
                 }
                 else
                 {
@@ -301,13 +301,18 @@ Node *deleteNode(Node *root, int issn)
     }
     else
     {
-        if (root->right == NULL)
+        if(root->right == NULL && root->left == NULL)
+        {
+            free(root);
+            return NULL;
+        }
+        else if (root->right == NULL && root->left != NULL)
         {
             Node *temp = root->left;
             free(root);
             return temp;
         }
-        else if (root->left == NULL)
+        else if (root->left == NULL && root->right != NULL)
         {
            
             Node *temp = root->right;
