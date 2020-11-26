@@ -120,6 +120,19 @@ Node *rotateRR(Node *root)
     return aux;
 }
 
+Node *rotateLR(Node* root)
+{
+    //Rotação LR
+    rotateRR(root->left);
+    return rotateLL(root);
+}
+
+Node *rotateRL(Node* root)
+{
+     rotateLL(root->right); 
+     return rotateRR(root);
+}
+
 Node *insertNode(Node *root, Book *book)
 {
     if (root == NULL)
@@ -140,8 +153,7 @@ Node *insertNode(Node *root, Book *book)
             }
             else
             {
-                root->left = rotateRR(root->left); //Se o valor não for maior, rotação LR(left -> right)
-                return rotateLL(root);
+                root->left = rotateLR(root); //Se o valor não for maior, rotação LR(left -> right)
             }
         }
     }
@@ -159,8 +171,8 @@ Node *insertNode(Node *root, Book *book)
                 }
                 else
                 {
-                    root->right = rotateLL(root->right); //Se não é uma rotação RL(right -> left)
-                    return rotateRR(root);
+                    root->right = rotateRL(root); //Se não é uma rotação RL(right -> left)
+                    
                 }
             }
         }
@@ -272,8 +284,7 @@ Node *deleteNode(Node *root, int issn)
             {
                 //Rotação right -> left
                 //Caso cotovelo (inserção direita esquerda)
-                root->right = rotateLL(root->right); 
-                return rotateRR(root);
+                root->right = rotateRL(root);
             }
         }
     }
@@ -287,31 +298,31 @@ Node *deleteNode(Node *root, int issn)
         {
             if (getHeight(root->left->right) <= getHeight(root->left->left))
             {
-                printf("Cheguei aqui 1\n");
-                return rotateLL(root); //Rotação a direita (caso inserção esquerda esquerda)
+                return rotateLL(root); //Rotação a direita (caso inserção esquerda esquerda da sub arvore)
             }
             else
             {
-                printf("Cheguei aqui 2\n");
                 //Rotação left -> right
-                //Caso cotovelo (inserção esquerda direita)
-                root->left = rotateRR(root->left); 
-                return rotateRR(root);
+                //Caso cotovelo (inserção esquerda direita da sub arvore)
+                root->left = rotateLR(root);
             }
         }
     }
     else
     {
-        if (root->right == NULL)
+        if(root->right == NULL && root->left == NULL)
         {
-            printf("Cheguei aqui 3\n");
+            free(root);
+            return NULL;
+        }
+        else if (root->right == NULL && root->left != NULL)
+        {
             Node *temp = root->left;
             free(root);
             return temp;
         }
-        else if (root->left == NULL)
+        else if (root->left == NULL && root->right != NULL)
         {
-            printf("Cheguei aqui 4\n");
             Node *temp = root->right;
             free(root);
             return temp;
@@ -326,21 +337,21 @@ Node *deleteNode(Node *root, int issn)
             {
                 if(getHeight(root->left->right) <= getHeight(root->left->left))
                 {
-                    printf("Cheguei aqui 6\n");
+                    printf("Cheguei aqui \n");
                     return rotateLL(root); //Rotação direita
                 }
                 else
                 {
-                    printf("Cheguei aqui 7\n");
                     //Rotação LR
-                    root->left = rotateRR(root->left); 
-                    return rotateLL(root);
+                    root->left = rotateLR(root);
                 }
             }
         }
     }
     return root;
 }
+
+
 
 Node *destroy(Node *root)
 {
