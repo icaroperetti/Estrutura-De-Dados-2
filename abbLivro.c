@@ -189,7 +189,7 @@ Node *deleteNode(Node *root, int issn)
         Book *aux = substitute->book;                                  //Faz uma copia do elemento encontrado
         root->right = deleteNode(root->right, substitute->book->issn); //Deleta o menor valor
         root->book = substitute->book;                                 //Joga o menor valor guardado no lugar do root
-    }
+      }
     }
     return root;  
 }
